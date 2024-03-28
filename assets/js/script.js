@@ -21,7 +21,7 @@ function createTaskCard(task) {
     // taskList.innerHTML= '';
     // inProgressList.innerHTML = '';
     // doneList.innerHTML = '';
-    // taskList.empty();
+    $('#todo-cards').empty();
     // let nextId = generateTaskId();
     for (let i = 0; i < tasks.length; i++) {
         const task = tasks[i];
@@ -71,7 +71,13 @@ function handleDeleteTask(event) {
 
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
-   
+   console.log("event: ", event)
+   console.log("event: ", event.target.id)
+   console.log("object: ", ui)
+   console.log("dataset: ", ui.draggable[0].dataset.nextId)
+    console.log("this" , $(this));
+   let taskId = $(this).attr('data-project-id');
+   console.log("Proj ID: ", taskId);
 }
 
 // Todo: when the page loads, render the task list, add event listeners, make lanes droppable, and make the due date field a date picker
@@ -81,9 +87,9 @@ function handleDrop(event, ui) {
 //         // This is where you can perform actions like sending data to a server
 //     );
        
-    function saveProjectsToStorage () {
-        localStorage.setItem('task', JSON.stringify(tasks));
-      };
+function saveProjectsToStorage () {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+};
 
     
     
@@ -100,8 +106,8 @@ $(function () {
     init();
     let submit = document.getElementById('theSubmit');
     submit.addEventListener('click', function(event){
-        localStorage.setItem('tasks', JSON.stringify(tasks))
         event.preventDefault();
+        localStorage.setItem('tasks', JSON.stringify(tasks))
 
         const taskIndex = {
             taskTitle: titleInput.value.trim(),
@@ -128,8 +134,13 @@ $(function () {
 
     
 });
+// setup our drag and drop functionality w/ jQuery
 $( function() {
-    $( "#draggable" ).draggable();
+    $( ".draggable" ).draggable();
+    $(".lane").droppable({
+        accept: '.draggable',
+        drop: handleDrop
+    })
   } );
 
 
